@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flyer Tahfidh Pendek</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Merriweather:wght@700;900&family=Poppins:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-orange: #ff6b35;
+            --text-brown: #5d4037;
+            --bg-mint: #e0f2f1;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- Panel Kontrol --- */
+        .control-panel {
+            background: white;
+            padding: 15px 20px;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .control-panel h2 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: var(--text-brown);
+            text-align: center;
+            border-bottom: 2px solid var(--primary-orange);
+            padding-bottom: 5px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        input, select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .file-upload-wrapper {
+            background: #f9f9f9;
+            padding: 8px;
+            border: 1px dashed #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .btn-download {
+            background-color: var(--primary-orange);
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* --- Area Flyer (Lebih Pendek) --- */
+        .canvas-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            overflow: auto;
+            padding-bottom: 20px;
+        }
+
+        #flyer-area {
+            /* Ukuran Fixed - DIUBAH LEBIH PENDEK */
+            width: 400px;
+            height: 500px; /* Sebelumnya 711px */
+            background-color: white;
+            position: relative;
+            /* Padding dikurangi sedikit agar muat */
+            padding: 25px 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between; /* Agar elemen tersebar rata vertikal */
+            background-image: linear-gradient(180deg, #ffffff 0%, #fff3e0 100%);
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        /* Container untuk konten utama agar bisa di-tengah secara vertikal */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Header Flyer */
+        .header-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 1px; /* Jarak dikurangi */
+            gap: 10px;
+        }
+
+        .logo-img { width: 60px; height: auto; }
+
+        .school-name {
+            font-family: 'Merriweather', serif;
+            font-weight: 900;
+            font-size: 16px;
+            color: #e65100;
+            line-height: 1.1;
+            margin: 0;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
+        }
+
+        .school-address { font-size: 13px; color: #333; font-weight: 600; }
+
+        /* Body Flyer */
+        .intro-text {
+            font-size: 14px;
+            color: #444;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .student-name {
+            font-family: 'Sketsa Ramadhan Alternates', cursive;
+            font-size: 48px; /* Sedikit diperkecil */
+            color: var(--primary-orange);
+            margin: 5px 0; /* Jarak dikurangi */
+            line-height: 1;
+            text-shadow: 2px 2px 2px rgba(255,255,255,0.8);
+        }
+
+        .student-class {
+            font-family: 'Merriweather', serif;
+            font-size: 20px;
+            font-weight: bold;
+            color: #6d4c41;
+            margin-bottom: 15px; /* Jarak dikurangi */
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
+        }
+
+        .label-hafalan { font-size: 13px; color: #333; margin-bottom: 12px; }
+
+        .surah-container {
+            background-color: var(--primary-orange);
+            color: white;
+            padding: 10px 25px; /* Padding dikurangi */
+            border-radius: 50px;
+            margin-bottom: 30px; /* Jarak dikurangi */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            display: inline-block;
+            min-width: 180px;
+            border: 2px solid white;
+        }
+
+        .surah-name {
+            font-family: 'Merriweather', serif;
+            font-size: 22px; /* Sedikit diperkecil */
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .quote-box {
+            background-color: rgba(224, 242, 241, 0.9);
+            border: 2px solid #b2dfdb;
+            padding: 10px 15px; /* Padding dikurangi */
+            border-radius: 12px;
+            width: 90%;
+            margin-bottom: 5px;
+        }
+
+        .quote-text {
+            font-family: 'Segoe Print', sans-serif;
+            font-style: normal;
+            font-size: 13px;
+            color: #004d40;
+            line-height: 1.4;
+        }
+
+        .flyer-footer {
+            font-size: 12px;
+            font-weight: bold;
+            color: #e65100;
+            padding-top: 5px;
+            text-shadow: 1px 1px 1px rgba(255,255,255,1);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="control-panel">
+        <h2>Isi Data Santri</h2>
+        <div class="input-group">
+            <input type="text" id="inName" placeholder="Nama Santri" value="Muhammad Abdullah" oninput="updateFlyer()">
+            <select id="inClass" onchange="updateFlyer()">
+                <option value="Kelas 4A">Kelas 4A</option>
+                <option value="Kelas 4B">Kelas 4B</option>
+                <option value="Kelas 5A">Kelas 5A</option>
+                <option value="Kelas 5B">Kelas 5B</option>
+                <option value="Kelas 6A">Kelas 6A</option>
+                <option value="Kelas 6B">Kelas 6B</option>
+            </select>
+            <input type="text" id="inSurah" placeholder="Nama Surat" value="AL WAQI'AH" oninput="updateFlyer()">
+        </div>
+        <div class="file-upload-wrapper">
+            <label style="font-size:11px; font-weight:bold; display:block;">Upload Background (arsip.png):</label>
+            <input type="file" id="bgUpload" accept="image/*" onchange="handleBgUpload(this)">
+        </div>
+        <button class="btn-download" onclick="downloadFlyer()">Download PNG</button>
+    </div>
+
+    <div class="canvas-container">
+        <div id="flyer-area">
+            
+            <div class="header-section">
+                <img src="https://iili.io/fXljUa1.png" alt="Logo" class="logo-img" crossOrigin="anonymous">
+                <div class="school-info">
+                    <h1 class="school-name">MIS HIDAYATUL MUBTADIIN</h1>
+                    <div class="school-address">Undaan Kidul Kudus</div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="intro-text">
+                    Mengucapkan selamat & memberikan apresiasi kepada:
+                </div>
+                
+                <div class="student-name" id="outName">Muhammad Abdullah</div>
+                <div class="student-class" id="outClass">Kelas 4A</div>
+
+                <div class="label-hafalan">Telah menyelesaikan hafalan Surah :</div>
+                <div class="surah-container">
+                    <div class="surah-name" id="outSurah">AL WAQI'AH</div>
+                </div>
+
+                <div class="quote-box">
+                    <div class="quote-text">
+                        "Semoga ilmunya bermanfaat dunia akhirat dan menjadi motivasi bagi teman lainnya, Amin!"
+                    </div>
+                </div>
+            </div>
+
+            <div class="flyer-footer">
+                Guru Pembimbing : M. Yusni
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function updateFlyer() {
+            const name = document.getElementById('inName').value;
+            const kelas = document.getElementById('inClass').value;
+            const surah = document.getElementById('inSurah').value;
+
+            document.getElementById('outName').innerText = name || "Nama Santri";
+            document.getElementById('outClass').innerText = kelas;
+            document.getElementById('outSurah').innerText = surah || "NAMA SURAT";
+        }
+
+        function handleBgUpload(input) {
+            const flyer = document.getElementById('flyer-area');
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    flyer.style.backgroundImage = 'url(' + e.target.result + ')';
+                    flyer.style.backgroundSize = 'cover';
+                    flyer.style.backgroundPosition = 'center';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function downloadFlyer() {
+            const flyerNode = document.getElementById('flyer-area');
+            const btn = document.querySelector('.btn-download');
+            btn.innerText = "⏳ Memproses...";
+            html2canvas(flyerNode, {
+                scale: 3, useCORS: true, allowTaint: true, backgroundColor: null
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = "Tahfidh_" + document.getElementById('outName').innerText + ".png";
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+                btn.innerText = "Download PNG";
+            }).catch(err => { alert("Gagal. Coba lagi."); btn.innerText = "Download PNG"; });
+        }
+    </script>
+
+</body>
+</html>
